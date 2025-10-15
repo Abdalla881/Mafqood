@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Arabic RTL and Design System 
+All colors MUST be HSL. RTL-first approach with Cairo font.
+*/
+
+@layer base {
+  :root {
+    /* Core Colors - Blue & White Theme */
+    --background: 0 0% 100%;
+    --foreground: 220 20% 15%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 15%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 15%;
+    
+    /* Primary Blue Theme */
+    --primary: 210 100% 56%; /* #1E90FF - DodgerBlue */
+    --primary-foreground: 0 0% 100%;
+    --primary-hover: 210 100% 50%;
+    --primary-light: 210 100% 85%;
+    
+    --secondary: 220 15% 96%;
+    --secondary-foreground: 220 20% 15%;
+    
+    --muted: 220 15% 96%;
+    --muted-foreground: 220 10% 45%;
+    
+    --accent: 210 100% 95%;
+    --accent-foreground: 210 100% 40%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 210 100% 56%;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+    
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+    
+    --radius: 0.75rem;
+    
+    /* Arabic Design Tokens */
+    --gradient-primary: linear-gradient(135deg, hsl(210 100% 56%), hsl(210 100% 70%));
+    --gradient-hero: linear-gradient(180deg, hsl(210 100% 98%) 0%, hsl(210 100% 95%) 100%);
+    --shadow-card: 0 4px 20px -4px hsl(210 100% 56% / 0.1);
+    --shadow-hover: 0 8px 30px -8px hsl(210 100% 56% / 0.2);
+    
+    /* Sidebar (not used but keeping for compatibility) */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 210 100% 56%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 210 100% 56%;
+  }
+
+  .dark {
+    --background: 220 20% 8%;
+    --foreground: 0 0% 95%;
+    
+    --card: 220 20% 10%;
+    --card-foreground: 0 0% 95%;
+    
+    --popover: 220 20% 10%;
+    --popover-foreground: 0 0% 95%;
+    
+    --primary: 210 100% 60%;
+    --primary-foreground: 220 20% 8%;
+    --primary-hover: 210 100% 65%;
+    
+    --secondary: 220 20% 15%;
+    --secondary-foreground: 0 0% 95%;
+    
+    --muted: 220 20% 15%;
+    --muted-foreground: 220 10% 65%;
+    
+    --accent: 220 20% 15%;
+    --accent-foreground: 0 0% 95%;
+    
+    --border: 220 20% 18%;
+    --input: 220 20% 18%;
+    --ring: 210 100% 60%;
+    
+    --gradient-primary: linear-gradient(135deg, hsl(210 100% 60%), hsl(210 100% 70%));
+    --gradient-hero: linear-gradient(180deg, hsl(220 20% 12%) 0%, hsl(220 20% 8%) 100%);
+    --shadow-card: 0 4px 20px -4px hsl(0 0% 0% / 0.3);
+    --shadow-hover: 0 8px 30px -8px hsl(0 0% 0% / 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-arabic antialiased;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+  
+  /* Arabic Typography */
+  .font-arabic {
+    font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  
+  /* RTL Utilities */
+  .rtl {
+    direction: rtl;
+  }
+  
+  .ltr {
+    direction: ltr;
+  }
+}
