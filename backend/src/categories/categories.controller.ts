@@ -19,7 +19,7 @@ import { use } from 'passport';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../common/guard/roles.guard';
-import { Roles } from '../common/decorators/roles.decorator';';
+import { Roles } from '../common/decorators/roles.decorator';
 
 @Controller('categories')
 export class CategoriesController {
