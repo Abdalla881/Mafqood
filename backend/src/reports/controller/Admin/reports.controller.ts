@@ -12,12 +12,12 @@ import {
   UploadedFiles,
   Query,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { MongoIdParam } from 'src/common/decorators/mongo-id-param.decorator';
-import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtAuthGuard } from '../../../auth/guards/auth.guard';
+import { MongoIdParam } from '../../../common/decorators/mongo-id-param.decorator';
+import { RolesGuard } from '../../../common/guard/roles.guard';
+import { Roles } from '../../../common/decorators/roles.decorator';
 import { ReportsService } from 'src/reports/service/Admin/reports.service';
-import { QueryOptionsDto } from 'src/common/dto/query-options.dto';
+import { QueryOptionsDto } from '../../../common//dto/query-options.dto';
 
 @Controller('reports')
 export class ReportsController {

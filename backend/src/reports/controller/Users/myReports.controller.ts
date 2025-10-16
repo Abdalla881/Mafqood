@@ -13,10 +13,10 @@ import {
   Put,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { CreateReportDto } from 'src/reports/dto/create-report.dto';
-import { UpdateReportDto } from 'src/reports/dto/update-report.dto';
-import { MyReportsService } from 'src/reports/service/Users/myReports.service';
+import { JwtAuthGuard } from '../../../auth/guards/auth.guard';
+import { CreateReportDto } from '../../../reports/dto/create-report.dto';
+import { UpdateReportDto } from '../../../reports/dto/update-report.dto';
+import { MyReportsService } from '../../../reports/service/Users/myReports.service';
 
 @Controller('reports/me')
 export class MyReportsController {

@@ -14,12 +14,12 @@ import {
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { MongoIdParam } from 'src/common/decorators/mongo-id-param.decorator';
+import { MongoIdParam } from '../common/decorators/mongo-id-param.decorator';
 import { use } from 'passport';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { RolesGuard } from 'src/common/guard/roles.guard';
-import { Roles } from 'src/common/decorators/roles.decorator';
+import { JwtAuthGuard } from '../auth/guards/auth.guard';
+import { RolesGuard } from '../common/guard/roles.guard';
+import { Roles } from '../common/decorators/roles.decorator';';
 
 @Controller('categories')
 export class CategoriesController {

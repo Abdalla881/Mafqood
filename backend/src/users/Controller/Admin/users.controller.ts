@@ -12,7 +12,7 @@ import { UsersService } from '../../service/Admin/users.service';
 import { CreateUserDto } from '../../dto/Admin/create-user.dto';
 import { UpdateUserDto } from '../../dto/Admin/update-user.dto';
 
-import { MongoIdParam } from 'src/common/decorators/mongo-id-param.decorator';
+import { MongoIdParam } from '../../common/decorators/mongo-id-param.decorator';
 import { RolesGuard } from 'src/common/guard/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
