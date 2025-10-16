@@ -1,9 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { MongooseValidationFilter } from './common/filters/mongoose-validation.filter';
-
 import { AppModule } from './app.module';
-
 import morgan from 'morgan';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
@@ -18,7 +16,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   app.enableCors({
-    origin: 'http://localhost:8080', // أو *
+    origin: '*', // غيّر من localhost لـ *
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',
@@ -33,8 +31,9 @@ async function bootstrap() {
   } else {
     app.use(morgan('combined'));
   }
-  await app.listen(process.env.PORT ?? 3000){
-    console.log(`Application is running on: ${await app.getUrl()}`);
-  };
+
+  await app.listen(process.env.PORT ?? 3000, '0.0.0.0');
+  console.log(`Application is running on port ${process.env.PORT ?? 3000}`);
 }
+
 bootstrap();
