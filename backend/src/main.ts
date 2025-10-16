@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { MongooseValidationFilter } from './common/filters/mongoose-validation.filter';
 import { AppModule } from './app.module';
+import 'module-alias/register';
+
 import morgan from 'morgan';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';

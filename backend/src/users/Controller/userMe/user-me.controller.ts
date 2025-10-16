@@ -15,8 +15,8 @@ import {
 
 import { UserMeService } from '../../service/userMe/user-me.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { UpdateUserDto } from 'src/users/dto/Admin/update-user.dto';
+import { JwtAuthGuard } from '../../../auth/guards/auth.guard';
+import { UpdateUserDto } from '../../dto/Admin/update-user.dto';
 
 @Controller('users/me')
 export class UserMeController {
