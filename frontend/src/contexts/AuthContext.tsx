@@ -72,8 +72,10 @@ interface ApiResponse<T = unknown> {
 
 const config = {
   API_BASE_URL:
-    (import.meta as any)?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-    "http://localhost:3000",
+    (
+      import.meta as unknown as { env?: Record<string, string> }
+    )?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") ||
+    "https://mafqood-api.vercel.app",
   API_TIMEOUT: Number((import.meta as any)?.env?.VITE_API_TIMEOUT) || 10000,
   API_VERSION: (import.meta as any)?.env?.VITE_API_VERSION || "v1",
   STORAGE_KEYS: {
