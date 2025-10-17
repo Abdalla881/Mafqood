@@ -8,11 +8,10 @@ import { Types } from 'mongoose';
 import { Model } from 'mongoose';
 
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { Item } from 'src/items/interface/items.interface';
-import { ItemsService } from 'src/items/items.service';
-import { CreateReportDto } from 'src/reports/dto/create-report.dto';
-import { UpdateReportDto } from 'src/reports/dto/update-report.dto';
-import { Report } from 'src/reports/interface/reports.interface';
+import { ItemsService } from '../../../items/items.service';
+import { CreateReportDto } from '../../../reports/dto/create-report.dto';
+import { UpdateReportDto } from '../../../reports/dto/update-report.dto';
+import { Report } from '../../interface/reports.interface';
 
 @Injectable()
 export class MyReportsService {

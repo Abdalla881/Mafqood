@@ -8,15 +8,13 @@ import {
   UseInterceptors,
   Put,
   UseGuards,
-  UploadedFiles,
   UploadedFile,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { MongoIdParam } from '../common/decorators/mongo-id-param.decorator';
-import { use } from 'passport';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/auth.guard';
 import { RolesGuard } from '../common/guard/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';

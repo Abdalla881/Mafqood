@@ -7,8 +7,8 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './guards/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersService } from 'src/users/service/Admin/users.service';
-import { EmailModule } from 'src/email/email.module';
+import { UsersService } from '../users/service/Admin/users.service';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [

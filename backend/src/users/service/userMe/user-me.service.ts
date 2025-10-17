@@ -8,8 +8,8 @@ import { JwtService } from '@nestjs/jwt';
 
 import { user } from '../../interfaces/user.interface';
 import { Model } from 'mongoose';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { UpdateUserDto } from 'src/users/dto/Admin/update-user.dto';
+import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
+import { UpdateUserDto } from '../../../users/dto/Admin/update-user.dto';
 
 @Injectable()
 export class UserMeService {

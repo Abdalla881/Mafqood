@@ -8,8 +8,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Model } from 'mongoose';
 import { category } from './interface/categories.interface';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { MESSAGES } from '@nestjs/core/constants';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Injectable()
 export class CategoriesService {

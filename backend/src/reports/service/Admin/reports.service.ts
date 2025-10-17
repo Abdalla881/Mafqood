@@ -4,16 +4,13 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Types } from 'mongoose';
 import { Model } from 'mongoose';
 
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
-import { QueryOptionsDto } from 'src/common/dto/query-options.dto';
-import { paginateAndFilter } from 'src/common/utils/query.util';
-import { Item } from 'src/items/interface/items.interface';
-import { ItemsService } from 'src/items/items.service';
-import { CreateReportDto } from 'src/reports/dto/create-report.dto';
-import { Report } from 'src/reports/interface/reports.interface';
+import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
+import { QueryOptionsDto } from '../../../common/dto/query-options.dto';
+import { paginateAndFilter } from '../../../common/utils/query.util';
+import { ItemsService } from '../../../items/items.service';
+import { Report } from '../../interface/reports.interface';
 
 @Injectable()
 export class ReportsService {

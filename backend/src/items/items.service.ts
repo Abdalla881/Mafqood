@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { Item } from './interface/items.interface';
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 
