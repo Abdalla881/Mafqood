@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../../../auth/guards/auth.guard';
 import { MongoIdParam } from '../../../common/decorators/mongo-id-param.decorator';
 import { RolesGuard } from '../../../common/guard/roles.guard';
 import { Roles } from '../../../common/decorators/roles.decorator';
-import { ReportsService } from 'src/reports/service/Admin/reports.service';
+import { ReportsService } from '../../../reports/service/Admin/reports.service';
 import { QueryOptionsDto } from '../../../common//dto/query-options.dto';
 
 @Controller('reports')

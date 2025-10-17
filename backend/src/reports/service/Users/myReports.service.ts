@@ -7,7 +7,7 @@ import {
 import { Types } from 'mongoose';
 import { Model } from 'mongoose';
 
-import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
 import { ItemsService } from '../../../items/items.service';
 import { CreateReportDto } from '../../../reports/dto/create-report.dto';
 import { UpdateReportDto } from '../../../reports/dto/update-report.dto';
