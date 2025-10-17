@@ -39,7 +39,7 @@ interface ItemDetailType {
 const API_BASE_URL = `${
   (
     import.meta as unknown as { env?: Record<string, string> }
-  )?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:3000"
+  )?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") || "https://mafqood.vercel.app"
 }/api/${
   (import.meta as unknown as { env?: Record<string, string> })?.env
     ?.VITE_API_VERSION || "v1"

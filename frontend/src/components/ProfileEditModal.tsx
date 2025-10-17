@@ -134,7 +134,7 @@ export const ProfileEditModal: React.FC<ProfileEditModalProps> = ({
       const response = await axios.post(
         `${
           import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-          "http://localhost:3000"
+          "https://mafqood.vercel.app"
         }/api/${import.meta.env.VITE_API_VERSION || "v1"}/users/me/avatar`,
         uploadFormData,
         {

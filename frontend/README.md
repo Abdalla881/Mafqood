@@ -24,7 +24,7 @@ A modern frontend for the Mafqood platform. Implements listing, searching, sorti
 Create `frontend/.env` (Vite requires VITE\_ prefix):
 
 ```ini
-VITE_API_BASE_URL=http://localhost:3000
+VITE_API_BASE_URL=https://mafqood.vercel.app
 VITE_API_VERSION=v1
 VITE_API_TIMEOUT=10000
 ```
