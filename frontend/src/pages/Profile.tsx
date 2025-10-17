@@ -127,7 +127,7 @@ export const Profile: React.FC = () => {
         const response = await axios.get(
           `${
             import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-            "https://mafqood.vercel.app"
+            "https://mafqood-api.vercel.app"
           }/api/${import.meta.env.VITE_API_VERSION || "v1"}/reports/me`,
           {
             headers: token ? { Authorization: `Bearer ${token}` } : undefined,
@@ -707,7 +707,7 @@ export const Profile: React.FC = () => {
                     await axios.delete(
                       `${
                         import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-                        "https://mafqood.vercel.app"
+                        "https://mafqood-api.vercel.app"
                       }/api/${
                         import.meta.env.VITE_API_VERSION || "v1"
                       }/reports/me/${deleteId}`,
@@ -726,7 +726,7 @@ export const Profile: React.FC = () => {
                     const response = await axios.get(
                       `${
                         import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-                        "https://mafqood.vercel.app"
+                        "https://mafqood-api.vercel.app"
                       }/api/${
                         import.meta.env.VITE_API_VERSION || "v1"
                       }/reports/me`,
@@ -1009,7 +1009,7 @@ export const Profile: React.FC = () => {
                   await axios.put(
                     `${
                       import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-                      "https://mafqood.vercel.app"
+                      "https://mafqood-api.vercel.app"
                     }/api/${
                       import.meta.env.VITE_API_VERSION || "v1"
                     }/reports/me/${editingReport.id}`,
@@ -1030,7 +1030,7 @@ export const Profile: React.FC = () => {
                   const response = await axios.get(
                     `${
                       import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-                      "https://mafqood.vercel.app"
+                      "https://mafqood-api.vercel.app"
                     }/api/${
                       import.meta.env.VITE_API_VERSION || "v1"
                     }/reports/me`,

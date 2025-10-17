@@ -137,7 +137,7 @@ export const AddReport: React.FC = () => {
       const response = await axios.post(
         `${
           import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-          "https://mafqood.vercel.app"
+          "https://mafqood-api.vercel.app"
         }/api/${import.meta.env.VITE_API_VERSION || "v1"}/reports/me`,
         form,
         {
