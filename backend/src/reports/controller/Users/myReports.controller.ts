@@ -22,6 +22,9 @@ import { MyReportsService } from '../../../reports/service/Users/myReports.servi
 export class MyReportsController {
   constructor(private readonly reportsService: MyReportsService) {}
 
+  // @desc create new report
+  // @route POST api/v1/reports/me
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('images', 5))
   @Post()
@@ -33,12 +36,18 @@ export class MyReportsController {
     return this.reportsService.createReport(reportdata, req.user.id, files);
   }
 
+  // @desc find my report
+  // @route GET api/v1/reports/me
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @Get('')
   findMyReports(@Req() req) {
     return this.reportsService.findMyReports(req.user.id);
   }
 
+  // @desc update spacific report
+  // @route PUt api/v1/reports/me/:id
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('images', 5))
   @Put(':id')
@@ -56,6 +65,9 @@ export class MyReportsController {
     );
   }
 
+  // @desc Delete spacific report
+  // @route DELETE api/v1/reports/me/:id
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async deleteMyReport(@Param('id') reportId: string, @Req() req) {

@@ -15,7 +15,7 @@ export class CloudinaryService {
       cloudinary.uploader
         .upload_stream(
           {
-            folder, // فولدر ديناميك
+            folder,
             resource_type: 'auto',
           },
           (

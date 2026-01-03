@@ -22,17 +22,24 @@ import { Roles } from '../common/decorators/roles.decorator';
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
-
+  // @desc Get ALl categories
+  // @route GET api/v1/categories
+  // @access public
   @Get()
   findAll() {
     return this.categoriesService.findAll();
   }
-
+  // @desc Get spcific category by id
+  // @route GET api/v1/categories/:id
+  // @access public
   @Get(':id')
   findOne(@MongoIdParam() @Param('id') id: string) {
     return this.categoriesService.findOne(id);
   }
 
+  // @desc create new category
+  // @route POST api/v1/categories
+  // @access privet [admin]
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['admin'])
   @Post()
@@ -44,6 +51,9 @@ export class CategoriesController {
     return this.categoriesService.create(createCategoryDto, file);
   }
 
+  // @desc update  category
+  // @route PUT api/v1/categories/:id
+  // @access privet [admin]
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['admin'])
   @Put(':id')
@@ -56,6 +66,9 @@ export class CategoriesController {
     return this.categoriesService.update(id, updateCategoryDto, file);
   }
 
+  // @desc Delete  category
+  // @route Delete api/v1/categories/:id
+  // @access privet [admin]
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(['admin'])
   @Delete(':id')

@@ -17,7 +17,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   app.enableCors({
-    origin: 'https://mafqood.vercel.app', // غيّر من localhost لـ *
+    origin: ['https://mafqood.vercel.app', 'http://localhost:8080'], // غيّر من localhost لـ *
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
       'Content-Type',

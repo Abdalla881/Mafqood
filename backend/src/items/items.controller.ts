@@ -22,6 +22,9 @@ import { count } from 'console';
 export class ItemsController {
   constructor(private readonly itemsService: ItemsService) {}
 
+  // @desc create new item
+  // @route POST api/v1/items
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('images', 5))
   @Post()
@@ -36,6 +39,9 @@ export class ItemsController {
     };
   }
 
+  // @desc GET All items
+  // @route GET api/v1/items
+  // @access public
   @Get()
   async findAll() {
     const items = await this.itemsService.findAll();
@@ -45,7 +51,9 @@ export class ItemsController {
       items,
     };
   }
-
+  // @desc GET spcicific item by id
+  // @route GET api/v1/items/:id
+  // @access public
   @Get(':id')
   async findOne(@Param('id') id: string) {
     const item = await this.itemsService.findOne(id);
@@ -56,6 +64,9 @@ export class ItemsController {
     };
   }
 
+  // @desc update ny item
+  // @route Put api/v1/items
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(FilesInterceptor('images', 5))
   @Put(':id')
@@ -70,7 +81,9 @@ export class ItemsController {
       data: item,
     };
   }
-
+  // @desc Delete my item
+  // @route Delete api/v1/items
+  // @access privet(user)
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async delete(@Param('id') id: string) {
