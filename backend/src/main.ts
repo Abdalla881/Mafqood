@@ -17,14 +17,20 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   app.enableCors({
-    origin: ['https://mafqood.vercel.app', 'http://localhost:8080'], // غيّر من localhost لـ *
+    origin: (origin, callback) => {
+      const allowedOrigins = [
+        'https://mafqood.vercel.app',
+        'http://localhost:8080',
+      ];
+
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: [
-      'Content-Type',
-      'Authorization',
-      'Cache-Control',
-      'Pragma',
-    ],
+    allowedHeaders: ['Content-Type', 'Authorization'],
   });
 
   if (process.env.NODE_ENV === 'development') {
