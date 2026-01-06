@@ -84,7 +84,6 @@ export class AuthController {
         this.configService.get<string>('FRONTEND_ORIGIN') ||
         'http://localhost:8080';
 
-      // Redirect to frontend with token in URL (one-time, HTTPS-secured)
       // This is necessary because Vercel subdomains can't share cookies
       const redirectUrl = `${frontendOrigin}/auth/google/callback?token=${result.token}`;
 
