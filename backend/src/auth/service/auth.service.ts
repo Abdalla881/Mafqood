@@ -175,13 +175,21 @@ The Mafqood Team
     let user = await this.userModel.findOne({ email: data.email }).exec();
 
     if (!user) {
-      // Create new user with Google auth
+      // Create new user with Google auth (no password required)
       user = await this.userModel.create({
         email: data.email,
         name: data.name,
         googleId: data.googleId,
         provider: 'google',
+        role: 'user', // Set default role
       });
+    } else {
+      // Update existing user with Google ID if not already set
+      if (!user.googleId) {
+        user.googleId = data.googleId;
+        user.provider = 'google';
+        await user.save();
+      }
     }
 
     return user;

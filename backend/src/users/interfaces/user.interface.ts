@@ -6,7 +6,9 @@ export interface user extends Document {
   readonly email: string;
   readonly phone?: string;
   readonly role: string;
-  password: string;
+  password?: string;
+  googleId?: string;
+  provider?: 'local' | 'google';
   resetCode?: string;
   resetCodeExpires?: Date;
   resetCodeVerified?: boolean;
