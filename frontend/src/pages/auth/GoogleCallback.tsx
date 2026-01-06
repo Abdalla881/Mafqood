@@ -46,8 +46,8 @@ export const GoogleCallback: React.FC = () => {
           return;
         }
 
-        // Read token from cookie (set by backend during Google callback)
-        const token = getTokenFromCookie("auth_token");
+        // Get token from URL params (backend redirects with token)
+        const token = searchParams.get("token");
 
         if (!token) {
           setError("No authentication token found. Please try again.");

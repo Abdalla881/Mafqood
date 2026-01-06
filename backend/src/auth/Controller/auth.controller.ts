@@ -68,16 +68,15 @@ export class AuthController {
     try {
       const result = await this.authService.googleLogin(req.user);
 
-      // Store token in a cookie instead of exposing it in the URL
+      // Store token in a cookie for backend use
       const isProd =
         this.configService.get<string>('NODE_ENV') === 'production';
 
       res.cookie('auth_token', result.token, {
-        httpOnly: false, // readable by frontend JS so SPA can use it
-        secure: isProd, // must be true in production (HTTPS)
-        sameSite: isProd ? 'none' : 'lax', // allow cross-site cookie in production
-        domain: isProd ? '.vercel.app' : undefined, // share between mafqood-api.vercel.app and mafqood.vercel.app
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: false,
+        secure: isProd,
+        sameSite: isProd ? 'none' : 'lax',
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         path: '/',
       });
 
@@ -85,8 +84,9 @@ export class AuthController {
         this.configService.get<string>('FRONTEND_ORIGIN') ||
         'http://localhost:8080';
 
-      // Redirect to frontend callback WITHOUT token in params
-      const redirectUrl = `${frontendOrigin}/auth/google/callback`;
+      // Redirect to frontend with token in URL (one-time, HTTPS-secured)
+      // This is necessary because Vercel subdomains can't share cookies
+      const redirectUrl = `${frontendOrigin}/auth/google/callback?token=${result.token}`;
 
       return res.redirect(redirectUrl);
     } catch (error) {
