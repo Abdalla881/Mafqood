@@ -62,11 +62,23 @@ export const GoogleCallback: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            withCredentials: true,
           });
 
           const result = response.data;
-          const user = result.data?.user || result.data || result;
+
+          // Handle nested response structure: { status, message, data: { message, data: user } }
+          let user = null;
+          if (result?.data?.data) {
+            user = result.data.data; // Backend returns { message, data: user }
+          } else if (result?.data) {
+            user = result.data; // Fallback
+          } else if (result) {
+            user = result; // Last resort
+          }
+
+          if (!user) {
+            throw new Error("Invalid user data received from server");
+          }
 
           const success = await handleGoogleCallback({ user, token });
 
@@ -75,9 +87,22 @@ export const GoogleCallback: React.FC = () => {
           } else {
             throw new Error("Failed to complete authentication");
           }
-        } catch (profileError) {
+        } catch (profileError: any) {
           console.error("Profile fetch error:", profileError);
-          setError("Failed to get user information");
+
+          // Better error message
+          let errorMessage = "Failed to get user information";
+          if (profileError.response?.status === 401) {
+            errorMessage = "Authentication token is invalid or expired";
+          } else if (profileError.response?.status === 404) {
+            errorMessage = "User profile not found";
+          } else if (profileError.response?.data?.message) {
+            errorMessage = profileError.response.data.message;
+          } else if (profileError.message) {
+            errorMessage = profileError.message;
+          }
+
+          setError(errorMessage);
           setLoading(false);
           setTimeout(() => navigate("/auth/login"), 3000);
         }
