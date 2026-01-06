@@ -4,11 +4,13 @@ import { AuthController } from './Controller/auth.controller';
 import { AuthService } from './service/auth.service';
 import { UserProviders } from '../users/users.providers';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './guards/jwt.strategy';
+import { JwtStrategy } from './strategies/jwt.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/service/Admin/users.service';
 import { EmailModule } from '../email/email.module';
+import { GoogleStrategyImpl } from './strategies/google.strategy';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
 
 @Module({
   imports: [
@@ -27,7 +29,14 @@ import { EmailModule } from '../email/email.module';
     EmailModule,
   ],
   controllers: [AuthController],
-  providers: [...UserProviders, UsersService, AuthService, JwtStrategy],
+  providers: [
+    ...UserProviders,
+    UsersService,
+    AuthService,
+    JwtStrategy,
+    GoogleStrategyImpl,
+    GoogleAuthGuard,
+  ],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

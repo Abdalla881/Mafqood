@@ -40,6 +40,11 @@ interface AuthState {
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
+  loginWithGoogle: () => void;
+  handleGoogleCallback: (data: {
+    user: any;
+    token: string;
+  }) => Promise<boolean>;
   register: (
     data: RegisterData
   ) => Promise<{ success: boolean; message?: string }>;
@@ -74,8 +79,7 @@ const config = {
   API_BASE_URL:
     (
       import.meta as unknown as { env?: Record<string, string> }
-    )?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") ||
-    "https://mafqood-api.vercel.app",
+    )?.env?.VITE_API_BASE_URL?.replace(/\/$/, "") || "http://localhost:3000",
   API_TIMEOUT: Number((import.meta as any)?.env?.VITE_API_TIMEOUT) || 10000,
   API_VERSION: (import.meta as any)?.env?.VITE_API_VERSION || "v1",
   STORAGE_KEYS: {
@@ -93,6 +97,8 @@ const API_ENDPOINTS = {
   SEND_RESET_CODE: "/auth/forget-password",
   VERIFY_RESET_CODE: "/auth/verify-reset-code",
   RESET_PASSWORD: "/auth/reset-password",
+  GOOGLE_AUTH: "/auth/google",
+  GOOGLE_CALLBACK: "/auth/google/callback",
 } as const;
 
 // ==================== Utilities ====================
@@ -343,6 +349,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     [apiClient, updateState]
   );
 
+  const loginWithGoogle = useCallback(() => {
+    // Redirect to backend Google auth endpoint
+    // The backend will redirect to Google, then back to /api/v1/auth/google/callback
+    // which returns JSON. The user will need to be redirected to frontend callback page
+    window.location.href = getApiUrl(API_ENDPOINTS.GOOGLE_AUTH);
+  }, []);
+
+  const handleGoogleCallback = useCallback(
+    async (data: { user: any; token: string }): Promise<boolean> => {
+      try {
+        updateState({ loading: true, error: null });
+
+        if (!data?.token || !data?.user) {
+          throw new Error("فشل تسجيل الدخول عبر Google");
+        }
+
+        const normalizedUser = normalizeUser(data.user, data.user.email);
+
+        storage.set(config.STORAGE_KEYS.TOKEN, data.token);
+        storage.set(config.STORAGE_KEYS.USER, normalizedUser);
+
+        updateState({
+          token: data.token,
+          user: normalizedUser,
+          isAuthenticated: true,
+          loading: false,
+        });
+
+        toast({
+          title: "تم تسجيل الدخول بنجاح",
+          description: "مرحباً بك في منصة مفقود",
+        });
+
+        return true;
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        updateState({ loading: false, error: errorMessage });
+        toast({
+          title: "خطأ في تسجيل الدخول",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        return false;
+      }
+    },
+    [updateState]
+  );
+
   const register = useCallback(
     async (
       data: RegisterData
@@ -577,6 +631,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     () => ({
       ...state,
       login,
+      loginWithGoogle,
+      handleGoogleCallback,
       register,
       updateProfile,
       logout,
@@ -593,6 +649,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
     [
       state,
       login,
+      loginWithGoogle,
+      handleGoogleCallback,
       register,
       updateProfile,
       logout,

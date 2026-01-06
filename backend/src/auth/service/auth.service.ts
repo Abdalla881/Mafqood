@@ -170,4 +170,33 @@ The Mafqood Team
       message: 'Password has been reset successfully. Please login again.',
     };
   }
+
+  async validateGoogleUser(data) {
+    let user = await this.userModel.findOne({ email: data.email }).exec();
+
+    if (!user) {
+      // Create new user with Google auth
+      user = await this.userModel.create({
+        email: data.email,
+        name: data.name,
+        googleId: data.googleId,
+        provider: 'google',
+      });
+    }
+
+    return user;
+  }
+
+  async googleLogin(user) {
+    const payload = {
+      email: user.email,
+      sub: user._id || user.id,
+      role: user.role,
+    };
+
+    return {
+      user,
+      token: await this.jwtService.signAsync(payload),
+    };
+  }
 }

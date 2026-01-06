@@ -20,6 +20,7 @@ import { Register } from "@/pages/auth/Register";
 import { ForgotPassword } from "@/pages/auth/ForgotPassword";
 import { VerifyResetCode } from "@/pages/auth/VerifyResetCode";
 import { ResetPassword } from "@/pages/auth/ResetPassword";
+import { GoogleCallback } from "@/pages/auth/GoogleCallback";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient({
@@ -83,6 +84,7 @@ const AppRoutes: React.FC = () => (
     <Route path="/auth/forgot-password" element={<ForgotPassword />} />
     <Route path="/auth/verify-reset-code" element={<VerifyResetCode />} />
     <Route path="/auth/reset-password" element={<ResetPassword />} />
+    <Route path="/auth/google/callback" element={<GoogleCallback />} />
 
     {/* Protected Routes */}
     <Route

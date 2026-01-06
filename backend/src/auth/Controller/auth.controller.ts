@@ -1,11 +1,25 @@
-import { Controller, Post, Body, Put } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Put,
+  Req,
+  UseGuards,
+  Get,
+  Res,
+} from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { AuthService } from '../service/auth.service';
 import { SignUpUserDto } from '../dtos/signUp-user.dto';
 import { LogInDto } from '../dtos/logIn.dto';
+import { GoogleAuthGuard } from '../guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   //@desc sign up a new user
   // @route POST /api/v1/auth/signup
@@ -39,6 +53,56 @@ export class AuthController {
     console.log(body);
 
     return this.authService.verifyResetCode(body.email, body.resetCode);
+  }
+
+  // @desc google login
+  // @route POST /api/v1/auth/google
+  // @access public
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuth() {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleCallback(@Req() req, @Res() res: any) {
+    try {
+      const result = await this.authService.googleLogin(req.user);
+
+      // Store token in a cookie instead of exposing it in the URL
+      const isProd =
+        this.configService.get<string>('NODE_ENV') === 'production';
+
+      res.cookie('auth_token', result.token, {
+        httpOnly: false, // readable by frontend JS so SPA can use it
+        secure: isProd, // must be true in production (HTTPS)
+        sameSite: isProd ? 'none' : 'lax', // allow cross-site cookie in production
+        domain: isProd ? '.vercel.app' : undefined, // share between mafqood-api.vercel.app and mafqood.vercel.app
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        path: '/',
+      });
+
+      const frontendOrigin =
+        this.configService.get<string>('FRONTEND_ORIGIN') ||
+        'http://localhost:8080';
+
+      // Redirect to frontend callback WITHOUT token in params
+      const redirectUrl = `${frontendOrigin}/auth/google/callback`;
+
+      return res.redirect(redirectUrl);
+    } catch (error) {
+      const frontendOrigin =
+        this.configService.get<string>('FRONTEND_ORIGIN') ||
+        'http://localhost:8080';
+
+      const message =
+        (error as Error)?.message || 'Authentication failed. Please try again.';
+
+      const redirectUrl = `${frontendOrigin}/auth/google/callback?error=${encodeURIComponent(
+        message,
+      )}`;
+
+      return res.redirect(redirectUrl);
+    }
   }
 
   //desc reset password
