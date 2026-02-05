@@ -8,6 +8,7 @@ import { Types } from 'mongoose';
 import { Model } from 'mongoose';
 
 import { CloudinaryService } from '../../../cloudinary/cloudinary.service';
+import { createClient } from 'redis';
 import { ItemsService } from '../../../items/items.service';
 import { CreateReportDto } from '../../../reports/dto/create-report.dto';
 import { UpdateReportDto } from '../../../reports/dto/update-report.dto';
@@ -20,6 +21,8 @@ export class MyReportsService {
     private reportModel: Model<Report>,
     private itemService: ItemsService,
     private cloudinaryService: CloudinaryService,
+    @Inject('REDIS_CLIENT')
+    private readonly redis: ReturnType<typeof createClient>,
   ) {}
 
   async createReport(
@@ -52,6 +55,7 @@ export class MyReportsService {
       if (!report) {
         throw new Error('Report not found after creation');
       }
+      await this.redis.del(`user:${userId}:reports`);
 
       return {
         message: `Report Created successfully `,
@@ -74,17 +78,32 @@ export class MyReportsService {
   }
 
   async findMyReports(userId: string) {
+    const key = `user:${userId}:reports`;
+    const cached = await this.redis.get(key);
+
+    if (cached) {
+      const reports = JSON.parse(cached);
+      return {
+        message: 'Get My Reports Successfully (from cache)',
+        count: reports.length,
+        data: reports,
+      };
+    }
     const reports = await this.reportModel
       .find({ reporter: userId })
       .populate({
         path: 'item',
         populate: { path: 'category', select: 'name' },
       })
-      .populate('reporter', 'name email');
+      .populate('reporter', 'name email')
+      .lean();
 
     if (reports.length === 0) {
       throw new NotFoundException('You have no reports');
     }
+    await this.redis.set(key, JSON.stringify(reports), {
+      EX: 60 * 60, // Cache for 1 hour
+    });
 
     return {
       message: 'Get My Reports Successfully',
@@ -135,6 +154,7 @@ export class MyReportsService {
 
       await session.commitTransaction();
       session.endSession();
+      await this.redis.del(`user:${userId}:reports`);
 
       return {
         message: 'Report updated successfully',
@@ -169,6 +189,8 @@ export class MyReportsService {
 
       await session.commitTransaction();
       session.endSession();
+
+      await this.redis.del(`user:${userId}:reports`);
 
       return {
         message: 'Report and associated item/images deleted successfully',

@@ -29,10 +29,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? errorResponse
         : (errorResponse as any).message || 'Unexpected error';
 
+    const stack = (exception as any).stack;
+
     response.status(status).json({
       statusCode: status,
       success: false,
       message,
+      stack,
     });
   }
 }

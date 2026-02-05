@@ -8,6 +8,7 @@ import { EmailModule } from './email/email.module';
 import { ItemsModule } from './items/items.module';
 import { CategoriesModule } from './categories/categories.module';
 import { ReportsModule } from './reports/reports.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ReportsModule } from './reports/reports.module';
     ItemsModule,
     ReportsModule,
     CategoriesModule,
+    RedisModule,
   ],
 })
 export class AppModule {}
