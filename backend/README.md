@@ -27,14 +27,14 @@ The implementation of Redis caching has significantly improved the API's perform
 - **Total Requests Handled**: 3,326
 
 
-<img width="971" height="546" alt="Screenshot (97)" src="https://github.com/user-attachments/assets/0b720081-363f-4e32-84c7-17c1c223bc37" />
+<img width="671" height="246" alt="Screenshot (97)" src="https://github.com/user-attachments/assets/0b720081-363f-4e32-84c7-17c1c223bc37" />
 
 #### After Redis Caching
 - **Throughput**: 16.56 requests/second (**+59% improvement**)
 - **Average Response Time**: 375 ms (**-66% improvement**)
 - **Total Requests Handled**: 5,075 (**+53% more requests**)
 
-<img width="975" height="549" alt="Screenshot (98)" src="https://github.com/user-attachments/assets/dea2d00f-9d55-4f85-9333-b3aa6cdc4a6d" />
+<img width="675" height="249" alt="Screenshot (98)" src="https://github.com/user-attachments/assets/dea2d00f-9d55-4f85-9333-b3aa6cdc4a6d" />
 
 
 > [!IMPORTANT]
