@@ -13,11 +13,36 @@ A production-ready NestJS (v11) REST API for the Mafqood platform. It powers los
 - MongoDB (Mongoose) with providers-based architecture
 - CORS enabled and configurable
 - Structured, modular NestJS codebase
+- **Redis caching** for improved performance
+
+## Performance Benchmarks
+
+### Redis Caching Impact
+
+The implementation of Redis caching has significantly improved the API's performance:
+
+#### Before Redis Caching
+- **Throughput**: 10.41 requests/second
+- **Average Response Time**: 1,109 ms
+- **Total Requests Handled**: 3,326
+
+![Performance before Redis caching](C:/Users/E S R A A/.gemini/antigravity/brain/eaef927e-d5ab-4fad-bb1f-8c999bd398b3/uploaded_media_1770323322707.png)
+
+#### After Redis Caching
+- **Throughput**: 16.56 requests/second (**+59% improvement**)
+- **Average Response Time**: 375 ms (**-66% improvement**)
+- **Total Requests Handled**: 5,075 (**+53% more requests**)
+
+![Performance after Redis caching](C:/Users/E S R A A/.gemini/antigravity/brain/eaef927e-d5ab-4fad-bb1f-8c999bd398b3/uploaded_media_1770323386072.png)
+
+> [!IMPORTANT]
+> Redis caching reduced response times by **66%** and increased throughput by **59%**, enabling the API to handle significantly more concurrent users with better performance.
 
 ## Tech Stack
 
 - NestJS 11, TypeScript
 - MongoDB + Mongoose 8
+- **Redis** (caching layer)
 - JWT, Passport
 - class-validator, class-transformer
 - Cloudinary, Multer memory storage
@@ -28,6 +53,7 @@ A production-ready NestJS (v11) REST API for the Mafqood platform. It powers los
 
 - Node.js ≥ 18
 - MongoDB instance
+- **Redis server** (for caching)
 - Cloudinary account (for image hosting)
 - SMTP creds (optional: for email)
 
@@ -49,6 +75,10 @@ FRONTEND_ORIGIN=http://localhost:5173
 
 # Database
 MONGODB_URI=mongodb://localhost:27017/mafqood
+
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
 
 # JWT
 JWT_SECRET=replace_me
@@ -112,21 +142,197 @@ Modules exist for these features. Endpoints typically live under `/api/v1/<modul
 
 ## Project Structure
 
+### Architecture Overview
+
+```mermaid
+graph TB
+    subgraph "Backend Application"
+        Main[main.ts]
+        App[app.module.ts]
+        
+        subgraph "Core Modules"
+            Auth[Auth Module]
+            Users[Users Module]
+            Reports[Reports Module]
+            Categories[Categories Module]
+            Items[Items Module]
+        end
+        
+        subgraph "Infrastructure"
+            DB[Database Module]
+            Redis[Redis Module]
+            Cloud[Cloudinary Module]
+            Email[Email Module]
+        end
+        
+        subgraph "Common Utilities"
+            Guards[Guards & Decorators]
+            Filters[Exception Filters]
+            Interceptors[Response Interceptors]
+            Pipes[Validation Pipes]
+            Utils[Query Utils]
+        end
+    end
+    
+    Main --> App
+    App --> Auth
+    App --> Users
+    App --> Reports
+    App --> Categories
+    App --> Items
+    App --> DB
+    App --> Redis
+    App --> Cloud
+    App --> Email
+    
+    Auth --> Guards
+    Reports --> Filters
+    Reports --> Interceptors
+    Users --> Pipes
+    Reports --> Utils
 ```
-src/
-  app.module.ts
-  main.ts
-  auth/
-  users/
-  reports/
-  categories/
-  items/
-  cloudinary/
-  common/
-    dto/
-    filters/
-    interceptors/
-    utils/
+
+### Detailed File Structure
+
+```
+backend/
+├── src/
+│   ├── main.ts                          # Application entry point
+│   ├── app.module.ts                    # Root module
+│   │
+│   ├── auth/                            # Authentication & Authorization
+│   │   ├── auth.module.ts
+│   │   ├── Controller/
+│   │   │   └── auth.controller.ts       # Login, signup, OAuth endpoints
+│   │   ├── dtos/
+│   │   │   ├── logIn.dto.ts
+│   │   │   └── signUp-user.dto.ts
+│   │   ├── guards/
+│   │   │   ├── auth.guard.ts            # JWT authentication guard
+│   │   │   └── google-auth.guard.ts     # Google OAuth guard
+│   │   ├── service/
+│   │   │   └── auth.service.ts
+│   │   └── strategies/
+│   │       ├── google.strategy.ts       # Passport Google strategy
+│   │       └── jwt.strategy.ts          # Passport JWT strategy
+│   │
+│   ├── users/                           # User Management
+│   │   ├── users.module.ts
+│   │   ├── users.providers.ts
+│   │   ├── Controller/
+│   │   │   ├── Admin/
+│   │   │   │   └── users.controller.ts  # Admin user management
+│   │   │   └── userMe/
+│   │   │       └── user-me.controller.ts # Current user profile
+│   │   ├── dto/
+│   │   │   └── Admin/
+│   │   │       ├── create-user.dto.ts
+│   │   │       └── update-user.dto.ts
+│   │   ├── interfaces/
+│   │   │   └── user.interface.ts
+│   │   ├── schema/
+│   │   │   └── user.schema.ts           # Mongoose user schema
+│   │   └── service/
+│   │       ├── Admin/
+│   │       │   └── users.service.ts
+│   │       └── userMe/
+│   │           └── user-me.service.ts
+│   │
+│   ├── reports/                         # Lost & Found Reports
+│   │   ├── reports.module.ts
+│   │   ├── reports.providers.ts
+│   │   ├── controller/
+│   │   │   ├── Admin/
+│   │   │   │   └── reports.controller.ts # Admin report management
+│   │   │   └── Users/
+│   │   │       └── myReports.controller.ts # User's own reports
+│   │   ├── dto/
+│   │   │   ├── create-report.dto.ts
+│   │   │   └── update-report.dto.ts
+│   │   ├── interface/
+│   │   │   └── reports.interface.ts
+│   │   ├── schema/
+│   │   │   └── report.schema.ts         # Mongoose report schema
+│   │   └── service/
+│   │       ├── Admin/
+│   │       │   └── reports.service.ts   # With Redis caching
+│   │       └── Users/
+│   │           └── myReports.service.ts
+│   │
+│   ├── categories/                      # Report Categories
+│   │   ├── categories.module.ts
+│   │   ├── categories.controller.ts
+│   │   ├── categories.provider.ts
+│   │   ├── categories.service.ts
+│   │   ├── dto/
+│   │   │   ├── create-category.dto.ts
+│   │   │   └── update-category.dto.ts
+│   │   ├── interface/
+│   │   │   └── categories.interface.ts
+│   │   └── schema/
+│   │       └── category.schema.ts
+│   │
+│   ├── items/                           # Lost/Found Items
+│   │   ├── items.module.ts
+│   │   ├── items.controller.ts
+│   │   ├── items.providers.ts
+│   │   ├── items.service.ts
+│   │   ├── dto/
+│   │   │   ├── create-item.dto.ts
+│   │   │   └── update-item.dto.ts
+│   │   ├── interface/
+│   │   │   └── items.interface.ts
+│   │   └── schema/
+│   │       └── item.schema.ts
+│   │
+│   ├── cloudinary/                      # Image Upload Service
+│   │   ├── cloudinary.module.ts
+│   │   ├── cloudinary.provider.ts
+│   │   ├── cloudinary.service.ts
+│   │   └── cloudinary-response.ts
+│   │
+│   ├── redis/                           # Redis Caching
+│   │   └── redis.module.ts              # Cache configuration
+│   │
+│   ├── email/                           # Email Service
+│   │   ├── email.module.ts
+│   │   └── email.service.ts             # Nodemailer integration
+│   │
+│   ├── DataBase/                        # Database Configuration
+│   │   ├── database.module.ts
+│   │   └── database.providers.ts        # MongoDB connection
+│   │
+│   └── common/                          # Shared Utilities
+│       ├── decorators/
+│       │   ├── mongo-id-param.decorator.ts # MongoDB ID validation
+│       │   └── roles.decorator.ts       # Role-based access control
+│       ├── dto/
+│       │   └── query-options.dto.ts     # Pagination, search, sort
+│       ├── filters/
+│       │   ├── all-exceptions.filter.ts # Global exception handler
+│       │   └── mongoose-validation.filter.ts
+│       ├── guard/
+│       │   └── roles.guard.ts           # Role authorization guard
+│       ├── interceptors/
+│       │   └── response.interceptor.ts  # Response formatting
+│       ├── interface/
+│       │   └── pagination-result.interface.ts
+│       ├── pipes/
+│       │   └── parse-mongo-id.pipe.ts   # MongoDB ID parsing
+│       └── utils/
+│           └── query.util.ts            # Query helpers (pagination, filtering)
+│
+├── dist/                                # Compiled output
+├── node_modules/                        # Dependencies
+├── .env                                 # Environment variables
+├── .gitignore
+├── .prettierrc
+├── eslint.config.mjs
+├── nest-cli.json
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── tsconfig.build.json
 ```
 
 ### Notable Common Utilities
