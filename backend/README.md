@@ -26,14 +26,16 @@ The implementation of Redis caching has significantly improved the API's perform
 - **Average Response Time**: 1,109 ms
 - **Total Requests Handled**: 3,326
 
-![Performance before Redis caching](C:/Users/E S R A A/.gemini/antigravity/brain/eaef927e-d5ab-4fad-bb1f-8c999bd398b3/uploaded_media_1770323322707.png)
+
+<img width="971" height="546" alt="Screenshot (97)" src="https://github.com/user-attachments/assets/0b720081-363f-4e32-84c7-17c1c223bc37" />
 
 #### After Redis Caching
 - **Throughput**: 16.56 requests/second (**+59% improvement**)
 - **Average Response Time**: 375 ms (**-66% improvement**)
 - **Total Requests Handled**: 5,075 (**+53% more requests**)
 
-![Performance after Redis caching](C:/Users/E S R A A/.gemini/antigravity/brain/eaef927e-d5ab-4fad-bb1f-8c999bd398b3/uploaded_media_1770323386072.png)
+<img width="975" height="549" alt="Screenshot (98)" src="https://github.com/user-attachments/assets/dea2d00f-9d55-4f85-9333-b3aa6cdc4a6d" />
+
 
 > [!IMPORTANT]
 > Redis caching reduced response times by **66%** and increased throughput by **59%**, enabling the API to handle significantly more concurrent users with better performance.
